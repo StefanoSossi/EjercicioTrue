@@ -39,11 +39,12 @@
       </v-container>
       <v-container class="py-4">
         <v-list three-line>
-          <template v-for="result in results">
+          <template v-for="result in visiblePages">
             <v-list-item :key="result.collectionId">
               <v-list-item-avatar>
                 <v-img :src="result.artworkUrl100"></v-img>
               </v-list-item-avatar>
+
               <v-list-item-content>
                 <v-list-item-title
                   v-text="result.artistName"
@@ -62,6 +63,11 @@
               </v-list-item-content>
             </v-list-item>
           </template>
+          <v-pagination
+            v-model="page"
+            :length="Math.ceil(results.length / itemsPerPage)"
+          ></v-pagination>
+          <v-btn text @click="seeAll()"> See All </v-btn>
         </v-list>
       </v-container>
     </v-form>
@@ -88,12 +94,22 @@ export default {
       "ebook",
       "all",
     ],
+    items: ["foo", "bar", "fizz", "buzz"],
     term: null,
     media: "all",
     entity: "album",
     results: [],
+    page: 1,
+    itemsPerPage: 20,
   }),
-
+  computed: {
+    visiblePages() {
+      return this.results.slice(
+        (this.page - 1) * this.itemsPerPage,
+        this.page * this.itemsPerPage
+      );
+    },
+  },
   methods: {
     async searchMusic() {
       await axios
@@ -109,6 +125,9 @@ export default {
     },
     sortAlphabeticZ_A() {
       this.results.sort((a, b) => (a.artistName < b.artistName ? 1 : -1));
+    },
+    seeAll() {
+      this.itemsPerPage = this.results.length;
     },
   },
 };

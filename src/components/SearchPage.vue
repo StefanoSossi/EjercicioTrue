@@ -28,6 +28,14 @@
             </v-btn>
           </v-col>
         </v-row>
+        <v-row>
+          <v-btn @click="sortAlphabeticA_Z()">
+            <v-icon dark large>mdi-sort-alphabetical-descending-variant</v-icon>
+          </v-btn>
+          <v-btn @click="sortAlphabeticZ_A()">
+            <v-icon dark large>mdi-sort-alphabetical-ascending-variant</v-icon>
+          </v-btn>
+        </v-row>
       </v-container>
       <v-container class="py-4">
         <v-list three-line>
@@ -95,6 +103,12 @@ export default {
         .then((res) => {
           this.results = res.data.results;
         });
+    },
+    sortAlphabeticA_Z() {
+      this.results.sort((a, b) => (a.artistName > b.artistName ? 1 : -1));
+    },
+    sortAlphabeticZ_A() {
+      this.results.sort((a, b) => (a.artistName < b.artistName ? 1 : -1));
     },
   },
 };
